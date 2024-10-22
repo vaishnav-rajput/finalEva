@@ -1,1 +1,31 @@
-<p>vehicle-form works!</p>
+<div class="parent-container ">
+    <h2>Schedule Reports</h2>
+    <h3>Select Required Report Types</h3>
+    <form  [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+        <div  formArrayName="reports" class="parent-container">
+            <mat-checkbox *ngFor="let report of reportsArray" [value]="report" (change)="onCheckboxChange($event)">
+                {{report}}
+            </mat-checkbox>
+         
+        </div>
+        <mat-error *ngIf="vehicleForm.get('reports').errors?.['minCheckboxes']">
+            Atleast one report type must be selected
+        </mat-error>
+
+        <!-- email -->
+         <h3>Enter Email ids</h3>
+         <div class="email-input" mat-dialog-content>
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="currentEmail"  placeholder="enter email ">
+                
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="addEmail($event)">Add</button>
+         </div>
+       
+        <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
+            Email already Entered
+        </mat-error>
+
+    </form>
+</div>  

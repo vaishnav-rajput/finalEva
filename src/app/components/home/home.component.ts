@@ -16,7 +16,8 @@ ngOnInit(): void {
 
 onOpenModal(id: any, title: any, isEdit = false){
     this.dialog.open(VehicleFormComponent, {
-      width: '40%',
+      width: '50%',
+      panelClass: 'custom-modal',
       data: {
         id: id,
         title: title,

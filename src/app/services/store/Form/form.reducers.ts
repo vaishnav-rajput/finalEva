@@ -35,3 +35,7 @@ const _formReducer = createReducer(initialState,
     )),
     on(resetForm, () => initialState)
 )
+
+export function formReducer (state: any, action: any){
+    return _formReducer
+}

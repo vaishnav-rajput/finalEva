@@ -10,6 +10,8 @@ import { MaterialModule } from './Material.Module';
 import { HomeComponent } from './components/home/home.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { ScheduleFormComponent } from './components/schedule-form/schedule-form.component';
+import { StoreModule } from '@ngrx/store';
+import { formReducer } from './services/store/Form/form.reducers';
 
 
 @NgModule({
@@ -25,10 +27,12 @@ import { ScheduleFormComponent } from './components/schedule-form/schedule-form.
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
+    StoreModule.forRoot({formState: formReducer}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [VehicleFormComponent, ScheduleFormComponent]
 })
 export class AppModule { }
