@@ -17,11 +17,15 @@ export class VehicleFormComponent implements OnInit{
 
   ngOnInit(): void {
     this.vehicleForm = this.fb.group({
-      reports: new FormArray([]),
+      reports: new FormArray([], [this.minSelectedCheckboxes]),
       emailList: new FormArray([]),
       currentEmail: new FormControl('', [Validators.email]) 
     })
   }
+
+  get emailList(){
+    return this.vehicleForm.get('emailList') as FormArray
+  } 
 
   minSelectedCheckboxes(formArray: FormArray){
     const selectedCount = formArray.controls.filter((control) => control.value).length;
@@ -33,7 +37,6 @@ export class VehicleFormComponent implements OnInit{
 
     if(event.checked){
       reportsArray.push(new FormControl(event.source.value));
-      console.log("")
     } else {
       const index = reportsArray.controls.findIndex(control => control.value === event.source.value)
       reportsArray.removeAt(index)

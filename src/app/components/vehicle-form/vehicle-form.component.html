@@ -26,6 +26,12 @@
         <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
             Email already Entered
         </mat-error>
-
+        <div class="email-container">
+            <div class="remove-button" *ngFor="let email of emailList.controls; index as i">
+                <p>{{email.value}}</p>
+                <p class="remove" (click)="removeEmail(i)">X</p>
+            </div>
+        </div>
+        <button [disabled]="!vehicleForm.valid || emailList.controls.length === 0">Next</button>
     </form>
 </div>  
