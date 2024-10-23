@@ -12,6 +12,8 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { ScheduleFormComponent } from './components/schedule-form/schedule-form.component';
 import { StoreModule } from '@ngrx/store';
 import { formReducer } from './services/store/Form/form.reducers';
+import { VehicleFilterPipe } from './pipes/vehicle-filter.pipe';
+import { ConfirmationFormComponent } from './components/confirmation-form/confirmation-form.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { formReducer } from './services/store/Form/form.reducers';
     AppComponent,
     HomeComponent,
     VehicleFormComponent,
-    ScheduleFormComponent
+    ScheduleFormComponent,
+    VehicleFilterPipe,
+    ConfirmationFormComponent
   ],
   imports: [
     BrowserModule,

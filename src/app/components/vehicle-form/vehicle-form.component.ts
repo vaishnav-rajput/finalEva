@@ -1,31 +1,53 @@
-import { Component, DoCheck, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { vehicleData } from 'src/app/vehicleData';
+import { VehicleFilterPipe } from 'src/app/pipes/vehicle-filter.pipe';
+import { updateVehicleForm } from 'src/app/services/store/Form/form.actions';
+import { FormModel } from 'src/app/services/store/Form/form.model';
+import { ScheduleFormComponent } from '../schedule-form/schedule-form.component';
 
 @Component({
   selector: 'app-vehicle-form',
   templateUrl: './vehicle-form.component.html',
-  styleUrls: ['./vehicle-form.component.scss']
+  styleUrls: ['./vehicle-form.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class VehicleFormComponent implements OnInit{
   vehicleForm : FormGroup;
   reportsArray: string[] = ["Fleet Wise Report", "Vehicle Wise Report", "Trip Wise", "Driving Scorecard Report"]
   // currentEmail: string = '';
+  vehicleBranches : string[] = ["Thane", "Pune", "Mumbai"];
+  selectedBranch!: string;
+  vehiclesData = vehicleData
+  
 
-  constructor(public dialogref: MatDialogRef<VehicleFormComponent>,private store:Store, private fb: FormBuilder ){}
+  constructor(public dialogref: MatDialogRef<VehicleFormComponent>,private store:Store<{formState: FormModel}>, 
+    private fb: FormBuilder, public dialog: MatDialog ){}
 
   ngOnInit(): void {
     this.vehicleForm = this.fb.group({
       reports: new FormArray([], [this.minSelectedCheckboxes]),
       emailList: new FormArray([]),
-      currentEmail: new FormControl('', [Validators.email]) 
+      currentEmail: new FormControl('', [Validators.email]) ,
+      branch: new FormControl('All'),
+      vehicleList: new FormArray([]),
+      searchText: new FormControl(null )
     })
   }
 
   get emailList(){
     return this.vehicleForm.get('emailList') as FormArray
   } 
+
+  get getReports(){
+    return this.vehicleForm.get('reports') as FormArray;
+  }
+
+  get searchInput(){
+    return this.vehicleForm.get('searchText')?.value;
+  }
 
   minSelectedCheckboxes(formArray: FormArray){
     const selectedCount = formArray.controls.filter((control) => control.value).length;
@@ -41,6 +63,19 @@ export class VehicleFormComponent implements OnInit{
       const index = reportsArray.controls.findIndex(control => control.value === event.source.value)
       reportsArray.removeAt(index)
     }
+  }
+
+  onVehicleCheckbox(vehicle: any,event : any){
+    const vehiclesListArray = this.vehicleForm.get('vehicleList') as FormArray;
+    if(event.target.checked){
+      vehiclesListArray.push(new FormControl(vehicle))
+    } else{
+      const index = vehiclesListArray.controls.findIndex(control => control.value == vehicle)
+      if(index !== -1){
+        vehiclesListArray.removeAt(index)
+      }
+    }
+    console.log("vehicles list array changed to ", this.vehicleForm.get('vehicleList') as FormArray)
   }
 
   addEmail(event: Event){
@@ -64,15 +99,53 @@ export class VehicleFormComponent implements OnInit{
 
   onSubmit(){
     if(this.vehicleForm.valid){
-      console.log("form is valid")
+      const emailList = this.vehicleForm.get('emailList')?.value as string[];
+      const vehicleList = this.vehicleForm.get('vehicleList')?.value as string[];
+      const reportsList = this.vehicleForm.get('reports')?.value as string[];
+
+      this.store.dispatch(updateVehicleForm({
+        emailList,
+        vehicleList,
+        reportsList
+      }))
+
+      this.store.select('formState').subscribe((state) => {
+        console.log("updated state", state)
+        console.log("updated vehicles", state.vehicleList)
+      })
+
+      this.dialogref.close()
+
+      this.dialogref.afterClosed().subscribe(() => {
+        this.dialog.open(ScheduleFormComponent, {
+          width: '50%',
+          maxHeight: '90vh',
+          // panelClass: 'custom-modal',
+          data: {
+            id: 1,
+            title: 'schedule reports',
+            isEdit: false,
+          }
+        })
+      })
     }
   }
 
-  // onEmailInputChange(event: Event){
-  //     currentEmail = (event.target as HTMLInputElement).value
-  // }
-
+ 
   isEmailInList(email: string): boolean {
     return (this.vehicleForm.get('emailList') as FormArray).controls.some(control => control.value === email);
+  }
+
+  hasVehicleWiseReport(): boolean{
+    return this.getReports.controls.some(control => control.value === 'Vehicle Wise Report')
+  }
+
+  branchChanged(){
+    if(this.selectedBranch == 'All') {
+      this.vehiclesData = vehicleData;
+      return;
+    }
+    this.vehiclesData = vehicleData.filter((vehicle) => vehicle.branch === this.selectedBranch)
+    
   }
 }

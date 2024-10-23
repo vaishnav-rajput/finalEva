@@ -1,1 +1,120 @@
-<p>schedule-form works!</p>
+<div class="parent-container">
+    <h2>Schedule Reports</h2>
+    <!-- previous data div -->
+     <div class="data-class">
+        <!-- titles -->
+         <div class="titles" >
+            <p>Report Types</p>
+            <p>Vehicles</p>
+            <p>Mailed to</p>
+         </div >
+         <!-- data -->
+          <div  class="data">
+            <div><span *ngFor="let report of reports">{{report}}</span></div>
+            
+            <p>Demo vehicles</p>
+            <p>Demo mails</p>
+
+          </div>
+     </div>
+    <!-- set time parent -->
+    <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+        <!-- set time -->
+         <div class="set-time">
+            <div>
+                <p>Set Time</p>
+            </div>
+            <div class="time-display">
+                <span>{{formattedTime}}</span>
+                <button (click)="decrementTime()">&#9660;</button>
+                <button (click)="incrementTime()">&#9650;</button>
+                <div class="toggle-buttons"> 
+                    <button (click)="setAmPm('am')" 
+                    [class.selected] = "scheduleForm.get('amPm')?.value === 'am'"
+                    >AM</button>
+                    <button (click)="setAmPm('pm')"
+                    [class.selected] = "scheduleForm.get('amPm')?.value === 'pm'"
+                    >PM</button>
+                </div>
+            </div>
+         </div> 
+
+         <!-- time interval -->
+          <div>
+            <!--title  -->
+            <div class="interval-title">
+                <p>Select Time Interval</p>
+                    <p><mat-slide-toggle formControlName="skipWeekend">Skip Weekends</mat-slide-toggle></p>
+            </div>
+
+            <!-- radio group -->
+            <mat-radio-group class="radio-group" formControlName="scheduleInterval">
+                <mat-radio-button value="Weekly">Weekly</mat-radio-button>
+                <div  *ngIf="intervalValue === 'Weekly'" class="weekly ">
+                    <mat-button-toggle-group
+                    [value]="selectedDay"
+                    (change)="onDaySelect($event)"
+                    formControlName="scheduleDate"
+                    >   
+                        <mat-button-toggle  *ngFor="let day of filteredDays" [value]="day" [class.selected]="this.scheduleForm.get('scheduleDate')?.value == day">
+                            {{day}}
+                        </mat-button-toggle>
+                      
+                    </mat-button-toggle-group>
+                </div>
+                <mat-radio-button value="Every 2 Weeks">Every 2 Weeks</mat-radio-button>
+                <div *ngIf="intervalValue === 'Every 2 Weeks'" class="weekly">
+                    <mat-button-toggle-group
+                    [value]="selectedDay"
+                    (change)="onDaySelect($event)"
+                    formControlName="scheduleDate"
+                    >   
+                        <mat-button-toggle  *ngFor="let day of filteredDays" [value]="day" [class.selected]="this.scheduleForm.get('scheduleDate')?.value == day">
+                            {{day}}
+                        </mat-button-toggle>
+                      
+                    </mat-button-toggle-group>
+                </div>
+                <mat-radio-button value="Monthly">Monthly</mat-radio-button>
+                <div *ngIf="intervalValue === 'Monthly'">
+                    <div class="calendar-container">
+                        <div *ngFor="let day of days"
+                            [class.disabled]="isPastDate(day)"
+                            [class.selected]="day.toString() === selectedDay"
+                            (click)="selectDay(day)"
+                        >
+                            {{day}}
+                        </div>
+
+                    </div>
+                </div>
+                <mat-radio-button value="Quarterly">Quarterly</mat-radio-button>
+                <div *ngIf="intervalValue === 'Quarterly'" class="quarterly">
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'Last day of the completed quarter'" (click)="setQuarterly('Last day of the completed quarter')">
+                        <p>Last day of the completed quarter</p>
+                    </div>
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'First day of the next quarter'" (click)="setQuarterly('First day of the next quarter')">
+                        <p>First day of the next quarter</p>
+                    </div>
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'custom'" (click)="setQuarterly('custom')">
+                        <p>Custom</p>
+                    </div>
+                </div>
+                <mat-radio-button value="Yearly">Yearly</mat-radio-button>
+                <div *ngIf="intervalValue === 'Yearly'" class="quarterly">
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'Last day of the year'" (click)="setQuarterly('Last day of the year')">
+                        <p>Last day of the year</p>
+                    </div>
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'First day of the year'" (click)="setQuarterly('First day of the year')">
+                        <p>First day of the year</p>
+                    </div>
+                    <div [class.selected]="scheduleForm.get('scheduleDate')?.value === 'custom'" (click)="setQuarterly('custom')">
+                        <p>Custom</p>
+                    </div>
+                </div>
+            </mat-radio-group>
+            
+          </div>
+          <button type="submit"  mat-raised-button>Next</button>
+    </form>
+</div>

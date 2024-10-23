@@ -1,7 +1,7 @@
 <div class="parent-container ">
     <h2>Schedule Reports</h2>
     <h3>Select Required Report Types</h3>
-    <form  [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+    <form class="form-class"  [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
         <div  formArrayName="reports" class="parent-container">
             <mat-checkbox *ngFor="let report of reportsArray" [value]="report" (change)="onCheckboxChange($event)">
                 {{report}}
@@ -14,24 +14,57 @@
 
         <!-- email -->
          <h3>Enter Email ids</h3>
-         <div class="email-input" mat-dialog-content>
-            <mat-form-field appearance="fill" class="form-field">
+         <div  >
+            <mat-form-field appearance="fill" class="custom-form-field">
                 <mat-label>Email</mat-label>
-                <input matInput formControlName="currentEmail"  placeholder="enter email ">
+                <input matInput formControlName="currentEmail" class="custom-input"  placeholder="enter email ">
                 
             </mat-form-field>
-            <button mat-raised-button color="primary" (click)="addEmail($event)">Add</button>
+            <button type="button" mat-raised-button color="primary" class="custom-button" (click)="addEmail($event)">Add</button>
          </div>
        
         <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
             Email already Entered
         </mat-error>
+
+        <div *ngIf="hasVehicleWiseReport()">
+            <h3>Select Vehicles</h3>
+            <div class="vehicles-container">
+                <!-- filtering -->
+                <div class="filter-container">
+                <mat-form-field class="custom-select">
+                    <mat-label>Select Branch</mat-label>
+                    <mat-select class="mat-select" (selectionChange)="branchChanged()" [(value)]="selectedBranch" >
+                        <mat-option value="All">All</mat-option>
+
+                        <mat-option *ngFor="let branch of vehicleBranches" value="{{branch}}">{{branch}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="search">
+                    <input class="search-input"  formControlName="searchText"  placeholder="search vehicles..">
+                </div>
+                </div>
+                <!-- vehicles -->
+                    <div class="vehicles-list">
+                        <!-- vehicle checkbox -->
+                        <div *ngFor="let vehicle of vehiclesData | vehicleFilter : searchInput" class="checkbox-container">
+                            <input class="checkbox-input" (change)="onVehicleCheckbox(vehicle,$event)" type="checkbox"  >
+                            <div class="checkbox-content">
+                                <p>{{vehicle.registration_number}}</p>
+                                <p>VIN: {{vehicle.vin}}</p>
+                                <p>{{vehicle.lob_name}}</p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
         <div class="email-container">
             <div class="remove-button" *ngFor="let email of emailList.controls; index as i">
                 <p>{{email.value}}</p>
                 <p class="remove" (click)="removeEmail(i)">X</p>
             </div>
         </div>
-        <button [disabled]="!vehicleForm.valid || emailList.controls.length === 0">Next</button>
+        <button type="submit" [disabled]="!vehicleForm.valid || emailList.controls.length === 0">Next</button>
     </form>
 </div>  

@@ -3,22 +3,24 @@ import { initialState } from "./form.state";
 import { addFormDataset, resetForm, setCurrentStep, updateScheduleForm, updateVehicleForm } from "./form.actions";
 
 const _formReducer = createReducer(initialState,
-    on(updateVehicleForm, (state, {reportsList, emailList}) => (
+    on(updateVehicleForm, (state, {reportsList, emailList, vehicleList}) => (
         {
             ...state,
             reportsList,
             emailList,
+            vehicleList,
             currentStep: 1,
         }
     )),
-    on(updateScheduleForm, (state, {scheduleDate, scheduleTime, scheduleInterval, skipWeekend}) => (
+    on(updateScheduleForm, (state, {scheduleDate, scheduleTime, scheduleInterval, skipWeekend, amPm}) => (
         {
             ...state,
             scheduleDate,
             scheduleTime,
             scheduleInterval,
             skipWeekend,
-            currentStep: 2
+            currentStep: 2,
+            amPm
         }
     )),
     on(setCurrentStep, (state,{step}) => (
@@ -37,5 +39,5 @@ const _formReducer = createReducer(initialState,
 )
 
 export function formReducer (state: any, action: any){
-    return _formReducer
+    return _formReducer(state, action)
 }
