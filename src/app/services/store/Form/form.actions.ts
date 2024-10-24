@@ -28,3 +28,8 @@ export const addFormDataset = createAction(
 export const resetForm = createAction(
     'resetForm'
 )
+
+export const updateDataset = createAction(
+    'updateDataset',
+    props<{index: number; updateInput: FormModel}>()
+)

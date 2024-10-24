@@ -10,10 +10,11 @@
          </div >
          <!-- data -->
           <div  class="data">
-            <div><span *ngFor="let report of reports">{{report}}</span></div>
+            <div><span *ngFor="let report of reports">{{report}} ,</span></div>
             
-            <p>Demo vehicles</p>
-            <p>Demo mails</p>
+            <p><span *ngFor="let vehicle of vehicles">{{vehicle.registration_number}} ,</span></p>
+            <p><span *ngFor="let email of mailedTo">{{email}} ,</span>
+            </p>
 
           </div>
      </div>
@@ -26,8 +27,8 @@
             </div>
             <div class="time-display">
                 <span>{{formattedTime}}</span>
-                <button (click)="decrementTime()">&#9660;</button>
-                <button (click)="incrementTime()">&#9650;</button>
+                <button type="button" (click)="decrementTime()">&#9660;</button>
+                <button type="button" (click)="incrementTime()">&#9650;</button>
                 <div class="toggle-buttons"> 
                     <button (click)="setAmPm('am')" 
                     [class.selected] = "scheduleForm.get('amPm')?.value === 'am'"

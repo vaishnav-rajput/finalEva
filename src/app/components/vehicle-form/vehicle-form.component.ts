@@ -18,10 +18,10 @@ import { DateAdapter } from '@angular/material/core';
 export class VehicleFormComponent implements OnInit{
   vehicleForm : FormGroup;
   reportsArray: string[] = ["Fleet Wise Report", "Vehicle Wise Report", "Trip Wise", "Driving Scorecard Report"]
-  // currentEmail: string = '';
   vehicleBranches : string[] = ["Thane", "Pune", "Mumbai"];
   selectedBranch!: string;
-  vehiclesData = vehicleData
+  vehiclesData = vehicleData;
+  datasetData : any;
   
 
   constructor(public dialogref: MatDialogRef<VehicleFormComponent>,private store:Store<{formState: FormModel}>, 
@@ -36,32 +36,42 @@ export class VehicleFormComponent implements OnInit{
       vehicleList: new FormArray([]),
       searchText: new FormControl(null )
     })
-    console.log("isEdit",this.data.isEdit)
+
+   
+
     if(this.data.isEdit){
-      const dataset = this.getFormStateFromStore(this.data.index)
-      console.log("dataset", dataset)
+      let dataset = this.getFormStateFromStore(this.data.index)
+      this.datasetData = dataset;
 
       if(dataset){
-        // this.vehicleForm.patchValue({
-        //   reports: dataset.reportsList,
-        //   emailList: dataset.emailList,
-        //   vehicleList: dataset.vehicleList,
-        // })
-        this.patchReportsArray(dataset.reportsList)
         this.patchFormArray('emailList', dataset.emailList)
         this.patchFormArray('vehicleList', dataset.vehicleList)
-      }
+        this.patchReportsArray(dataset.reportsList)
+      }      
+
+    } else {
+      this.populateReportsArray()
     }
   }
 
-  patchReportsArray(selectedReports: string[]){
+  populateReportsArray() {
     const reportsArray = this.vehicleForm.get('reports') as FormArray;
-    reportsArray.clear();
+    this.reportsArray.forEach(() => reportsArray.push(new FormControl(false)));
+  }
+
+  isReportSelected(report: string): boolean {
+    return this.data.isEdit && this.datasetData?.reportsList?.includes(report);
+  }
+
+  patchReportsArray(reportsList: string[]) {
+    const reportsArray = this.vehicleForm.get('reports') as FormArray;
   
-    this.reportsArray.forEach(report => {
-      reportsArray.push(new FormControl(selectedReports.includes(report)));
+    this.reportsArray.forEach((report, i) => {
+      const isSelected = reportsList.includes(report);
+      reportsArray.push(new FormControl(isSelected));
     });
   }
+
 
   patchFormArray(formArrayName: string, values: any[]): void {
     const formArray = this.vehicleForm.get(formArrayName) as FormArray;
@@ -94,14 +104,13 @@ export class VehicleFormComponent implements OnInit{
     return selectedCount >= 1 ? null : {minCheckboxes : true}
   }
 
-  onCheckboxChange(event: any){
+  onCheckboxChange(event: any, index){
     const reportsArray = this.vehicleForm.get('reports') as FormArray;
-
     if(event.checked){
-      reportsArray.push(new FormControl(event.source.value));
+      reportsArray.at(index).setValue(true)
+      console.log("event.checked", event.checked, event.source.value)
     } else {
-      const index = reportsArray.controls.findIndex(control => control.value === event.source.value)
-      reportsArray.removeAt(index)
+      reportsArray.at(index).setValue(false)
     }
   }
 
@@ -141,12 +150,17 @@ export class VehicleFormComponent implements OnInit{
     if(this.vehicleForm.valid){
       const emailList = this.vehicleForm.get('emailList')?.value as string[];
       const vehicleList = this.vehicleForm.get('vehicleList')?.value as string[];
-      const reportsList = this.vehicleForm.get('reports')?.value as string[];
+      const reportsList = this.vehicleForm.get('reports')?.value as string[]
+      const selectedReports = this.vehicleForm.get('reports')?.value
+        .map((checked, i ) => (checked? this.reportsArray[i] : null))
+        .filter(v => v !==null)
+
+      console.log("selected Reports", selectedReports)
 
       this.store.dispatch(updateVehicleForm({
         emailList,
         vehicleList,
-        reportsList
+        reportsList: selectedReports
       }))
 
       this.store.select('formState').subscribe((state) => {
@@ -177,7 +191,11 @@ export class VehicleFormComponent implements OnInit{
   }
 
   hasVehicleWiseReport(): boolean{
-    return this.getReports.controls.some(control => control.value === 'Vehicle Wise Report')
+    const selectedReports = this.vehicleForm.value.reports
+    .map((checked, i ) => (checked? this.reportsArray[i] : null))
+    .filter(v => v !==null)
+
+    return selectedReports.some(control => control === 'Vehicle Wise Report')
   }
 
   branchChanged(){

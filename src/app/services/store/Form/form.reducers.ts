@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialState } from "./form.state";
-import { addFormDataset, resetForm, setCurrentStep, updateScheduleForm, updateVehicleForm } from "./form.actions";
+import { addFormDataset, resetForm, setCurrentStep, updateDataset, updateScheduleForm, updateVehicleForm } from "./form.actions";
 
 const _formReducer = createReducer(initialState,
     on(updateVehicleForm, (state, {reportsList, emailList, vehicleList}) => (
@@ -39,9 +39,18 @@ const _formReducer = createReducer(initialState,
         ...initialState,
         datasets: state.datasets
 
-    })
+         })),
+    on(updateDataset, (state,{index, updateInput }) => {
+        const updatedDataset =[...state.datasets];
+        updatedDataset[index] = updateInput;
+        console.log("updated dataset", updatedDataset)
+        return {
+            ...state,
+            datasets: updatedDataset,
+        }
+    } )
 )
-)
+
 
 export function formReducer (state: any, action: any){
     return _formReducer(state, action)

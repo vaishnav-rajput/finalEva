@@ -27,7 +27,7 @@ export class ScheduleFormComponent implements OnInit {
   today: number = new Date().getDate()
 
   reports: string[];
-  vehicles: string[];
+  vehicles: any[];
   mailedTo: string[];
 
   ngOnInit(): void {
@@ -35,6 +35,8 @@ export class ScheduleFormComponent implements OnInit {
       this.vehicles = state.vehicleList;
       this.mailedTo = state.emailList;
       this.reports = state.reportsList
+      console.log("vehicles", this.vehicles)
+      console.log("emails", this.mailedTo)
     })
 
     this.scheduleForm = this.fb.group({
@@ -84,6 +86,10 @@ export class ScheduleFormComponent implements OnInit {
       this.filteredDays = [...this.allDays]
     }
   }
+
+  parseVehicle(vehicleString: string): any {
+      return JSON.parse(vehicleString);
+    } 
 
   isPastDate(day: number){
     return day < this.today
