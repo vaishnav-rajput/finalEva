@@ -10,6 +10,6 @@
     <p><span>{{scheduleInterval}}</span> on <span>{{scheduleDate}}</span> at <span>{{scheduleTime}}{{amPm}}</span></p>
 
     <div class="confirm-btn">
-        <button class="confirm-button" mat-raised-button>Confirm</button>
+        <button (click)="onConfirm()" class="confirm-button" mat-raised-button>Confirm</button>
     </div>
 </div>

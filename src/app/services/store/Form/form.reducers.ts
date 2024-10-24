@@ -32,10 +32,15 @@ const _formReducer = createReducer(initialState,
     on(addFormDataset, (state) => (
         {
             ...state,
-            datasets: [...state.datasets, state]
+            datasets: [...state.datasets, {...state, datasets: []}]
         }
     )),
-    on(resetForm, () => initialState)
+    on(resetForm, (state) => ({
+        ...initialState,
+        datasets: state.datasets
+
+    })
+)
 )
 
 export function formReducer (state: any, action: any){

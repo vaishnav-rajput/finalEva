@@ -19,11 +19,13 @@
 
 .remove-button{
     display: flex;
-    gap: 0 10px;
+    gap: 10px;
     background: none;
     border: 1px solid black;
     border-radius: 5px;
     width: fit-content;
+    height: 40px;
+    padding: 10px;
 }
 
 .remove{
@@ -35,6 +37,7 @@
 }
 
 .email-input{
+    width: 80%;
     display: flex;
     gap: 0px 10px;
     align-items: center;
@@ -46,7 +49,9 @@
 
 
 .email-container{
-        height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+        height: 150px;
         padding: 10px;
         border: 1px solid #ccc;
         background-color: #fff;

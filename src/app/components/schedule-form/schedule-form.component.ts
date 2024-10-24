@@ -52,7 +52,30 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     this.filterDays(this.scheduleForm.get('skipWeekend')?.value)
+
+    if(this.data.isEdit){
+
+      const dataset = this.getFormStateFromStore(this.data.index)
+      if(dataset){
+      this.scheduleForm.patchValue({
+        scheduleTime: dataset.scheduleTime,
+        scheduleDate: dataset.scheduleDate,
+        scheduleInterval: dataset.scheduleInterval,
+        amPm: dataset.amPm,
+        skipWeekend: dataset.skipWeekend,
+      })
+    }
   }
+  }
+
+  getFormStateFromStore(index: number) {
+    let formState: FormModel;
+    this.store.select('formState').subscribe((state) => {
+      formState = state.datasets[index];  
+    });
+    return formState;
+  }
+
 
   filterDays(skipWeekend: boolean){
     if(skipWeekend){
@@ -129,6 +152,9 @@ export class ScheduleFormComponent implements OnInit {
         amPm
       }))
 
+
+
+
       this.dialogRef.close()
 
       this.dialogRef.afterClosed().subscribe(() => {
@@ -136,9 +162,9 @@ export class ScheduleFormComponent implements OnInit {
           width: '50%',
           maxHeight: '90vh',
           data: {
-            id: 1,
+            index: this.data.index,
             title: 'schedule reports',
-            isEdit: false
+            isEdit: this.data.isEdit
           }
         })
       })

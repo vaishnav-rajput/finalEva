@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { addFormDataset, resetForm } from 'src/app/services/store/Form/form.actions';
 
 @Component({
   selector: 'app-confirmation-form',
@@ -9,7 +10,7 @@ import { Store } from '@ngrx/store';
 })
 export class ConfirmationFormComponent implements OnInit{
   constructor(public dialogref: MatDialogRef<ConfirmationFormComponent>,
-    private store: Store<{formState}>
+    private store: Store<{formState}>, public dialog: MatDialog
   ){}
 
   reports: string[]
@@ -29,6 +30,17 @@ export class ConfirmationFormComponent implements OnInit{
       this.scheduleInterval = state.scheduleInterval
     })
   }
+
+  onConfirm(){
+    this.store.dispatch(addFormDataset())
+
+    this.store.dispatch(resetForm())
+
+    this.dialogref.close()
+    
+    
+  }
+
 
 
 

@@ -1,12 +1,13 @@
-import { Component, DoCheck, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, DoCheck, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { vehicleData } from 'src/app/vehicleData';
 import { VehicleFilterPipe } from 'src/app/pipes/vehicle-filter.pipe';
 import { updateVehicleForm } from 'src/app/services/store/Form/form.actions';
 import { FormModel } from 'src/app/services/store/Form/form.model';
 import { ScheduleFormComponent } from '../schedule-form/schedule-form.component';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -24,7 +25,7 @@ export class VehicleFormComponent implements OnInit{
   
 
   constructor(public dialogref: MatDialogRef<VehicleFormComponent>,private store:Store<{formState: FormModel}>, 
-    private fb: FormBuilder, public dialog: MatDialog ){}
+    private fb: FormBuilder, public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any ){}
 
   ngOnInit(): void {
     this.vehicleForm = this.fb.group({
@@ -35,6 +36,45 @@ export class VehicleFormComponent implements OnInit{
       vehicleList: new FormArray([]),
       searchText: new FormControl(null )
     })
+    console.log("isEdit",this.data.isEdit)
+    if(this.data.isEdit){
+      const dataset = this.getFormStateFromStore(this.data.index)
+      console.log("dataset", dataset)
+
+      if(dataset){
+        // this.vehicleForm.patchValue({
+        //   reports: dataset.reportsList,
+        //   emailList: dataset.emailList,
+        //   vehicleList: dataset.vehicleList,
+        // })
+        this.patchReportsArray(dataset.reportsList)
+        this.patchFormArray('emailList', dataset.emailList)
+        this.patchFormArray('vehicleList', dataset.vehicleList)
+      }
+    }
+  }
+
+  patchReportsArray(selectedReports: string[]){
+    const reportsArray = this.vehicleForm.get('reports') as FormArray;
+    reportsArray.clear();
+  
+    this.reportsArray.forEach(report => {
+      reportsArray.push(new FormControl(selectedReports.includes(report)));
+    });
+  }
+
+  patchFormArray(formArrayName: string, values: any[]): void {
+    const formArray = this.vehicleForm.get(formArrayName) as FormArray;
+    formArray.clear();
+    values.forEach(value => formArray.push(new FormControl(value)));
+  }
+
+  getFormStateFromStore(index: number){
+    let formState: FormModel;
+    this.store.select('formState').subscribe((state) => {
+      formState = state.datasets[index]
+    })
+    return formState;
   }
 
   get emailList(){
@@ -122,9 +162,9 @@ export class VehicleFormComponent implements OnInit{
           maxHeight: '90vh',
           // panelClass: 'custom-modal',
           data: {
-            id: 1,
+            index: this.data.index,
             title: 'schedule reports',
-            isEdit: false,
+            isEdit: this.data?.isEdit,
           }
         })
       })

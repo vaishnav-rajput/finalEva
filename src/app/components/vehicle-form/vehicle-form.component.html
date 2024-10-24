@@ -3,7 +3,7 @@
     <h3>Select Required Report Types</h3>
     <form class="form-class"  [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
         <div  formArrayName="reports" class="parent-container">
-            <mat-checkbox *ngFor="let report of reportsArray" [value]="report" (change)="onCheckboxChange($event)">
+            <mat-checkbox *ngFor="let report of reportsArray;let i = index" [formControlName]="i" [value]="report" (change)="onCheckboxChange($event)">
                 {{report}}
             </mat-checkbox>
          
