@@ -22,6 +22,9 @@ export class VehicleFormComponent implements OnInit{
   selectedBranch!: string;
   vehiclesData = vehicleData;
   datasetData : any;
+  showEmailInput: boolean = false;
+  errEmailLength: boolean = false;
+  
   
 
   constructor(public dialogref: MatDialogRef<VehicleFormComponent>,private store:Store<{formState: FormModel}>, 
@@ -57,6 +60,11 @@ export class VehicleFormComponent implements OnInit{
   populateReportsArray() {
     const reportsArray = this.vehicleForm.get('reports') as FormArray;
     this.reportsArray.forEach(() => reportsArray.push(new FormControl(false)));
+  }
+
+  toggleAddEmail(){
+    this.showEmailInput = !this.showEmailInput;
+    console.log("show email", this.showEmailInput)
   }
 
   isReportSelected(report: string): boolean {
@@ -108,7 +116,6 @@ export class VehicleFormComponent implements OnInit{
     const reportsArray = this.vehicleForm.get('reports') as FormArray;
     if(event.checked){
       reportsArray.at(index).setValue(true)
-      console.log("event.checked", event.checked, event.source.value)
     } else {
       reportsArray.at(index).setValue(false)
     }
@@ -124,7 +131,6 @@ export class VehicleFormComponent implements OnInit{
         vehiclesListArray.removeAt(index)
       }
     }
-    console.log("vehicles list array changed to ", this.vehicleForm.get('vehicleList') as FormArray)
   }
 
   addEmail(event: Event){
@@ -132,10 +138,15 @@ export class VehicleFormComponent implements OnInit{
     const currentEmailControl = this.vehicleForm.get('currentEmail') as FormControl;
     const currentEmail = currentEmailControl.value
 
+    if(emailArray.length === 5){
+      this.errEmailLength = true
+    } 
+
     if(currentEmail && emailArray.length < 5 && !emailArray.controls.some(control => control.value === currentEmail)){
       emailArray.push(new FormControl(currentEmail, Validators.email))
       console.log("email array after adding ", emailArray)
       currentEmailControl.reset()
+      this.toggleAddEmail()
     } else {
       console.log("email already in the list")
     }
@@ -144,6 +155,7 @@ export class VehicleFormComponent implements OnInit{
   removeEmail(index: number){
     const emailArray = this.vehicleForm.get('emailList') as FormArray;
     emailArray.removeAt(index)
+    this.errEmailLength = false
   }
 
   onSubmit(){
@@ -155,7 +167,6 @@ export class VehicleFormComponent implements OnInit{
         .map((checked, i ) => (checked? this.reportsArray[i] : null))
         .filter(v => v !==null)
 
-      console.log("selected Reports", selectedReports)
 
       this.store.dispatch(updateVehicleForm({
         emailList,
@@ -185,6 +196,10 @@ export class VehicleFormComponent implements OnInit{
     }
   }
 
+  closeDialog(){
+    this.dialogref.close()
+  }
+
  
   isEmailInList(email: string): boolean {
     return (this.vehicleForm.get('emailList') as FormArray).controls.some(control => control.value === email);
@@ -199,11 +214,16 @@ export class VehicleFormComponent implements OnInit{
   }
 
   branchChanged(){
-    if(this.selectedBranch == 'All') {
+    const searchControl = this.vehicleForm.get('searchText') as FormControl;
+    const selectBranch = this.vehicleForm.get('branch') as FormControl;
+
+    if(selectBranch.value == 'All') {
       this.vehiclesData = vehicleData;
+    searchControl.reset()
+
       return;
     }
-    this.vehiclesData = vehicleData.filter((vehicle) => vehicle.branch === this.selectedBranch)
-    
+    this.vehiclesData = vehicleData.filter((vehicle) => vehicle.branch === selectBranch.value)
+    searchControl.reset()
   }
 }

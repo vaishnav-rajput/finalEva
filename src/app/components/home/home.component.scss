@@ -31,3 +31,7 @@
     }
   }
   
+  /* component stylesheet */
+::ng-deep .custom-dialog-container {
+  border-radius: 10px;
+}

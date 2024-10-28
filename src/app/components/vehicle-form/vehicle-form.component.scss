@@ -4,18 +4,64 @@
     box-sizing: border-box;
 }
 
-.parent-container{
-    display: flex;
-    flex-direction: column;
-    gap: 0px 0px;
-    width: 90%;
-    padding: 15px;
-    overflow-y: visible;
-    margin: 0 auto;
-    padding-top: 0;
+.mat-body p,
+.mat-body-2 p,
+.mat-typography .mat-body p,
+.mat-typography .mat-body-2 p,
+.mat-typography p {
+    margin: 0 !important; /* Reset the margin */
 }
 
+.parent-container{
+    
+    box-shadow: 0px -3px 6px 0px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 10px 19px 0px rgba(98, 110, 147, 0.15);
+    min-height: 514px;
+    padding: 40px;
+    width: 565px;
 
+    .select-required{
+        margin-top: 20px !important;
+        font-family:'Open Sans';
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 19.07px;
+        text-align: left;
+        
+        }
+}
+
+.title-container{
+    height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .heading{
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 27.24px;
+        font-family:'Open Sans';
+    }
+
+   
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+    font-family: 'Material Symbols Outlined';
+    cursor: pointer;
+  }
+  
+.reports-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+}
 
 .remove-button{
     display: flex;
@@ -36,30 +82,111 @@
     width: 80%;
 }
 
-.email-input{
-    width: 80%;
-    display: flex;
-    gap: 0px 10px;
-    align-items: center;
-    height: 80px;
-    margin: 0;
-    padding: 0;
+
+.next-btn{
+    margin-top: 10px;
 }
 
 
 
-.email-container{
+.add-email-cont{
     display: flex;
-    flex-wrap: wrap;
-        height: 150px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        background-color: #fff;
+    gap: 0 5px;
+
+    input{
+        border-radius: 6px;
+        height: 30px;
+        border: 1px solid #C4C4C4;
+        width: 200px;
+        padding: 4px;
+    }
+
+    .add-button{
+        padding: 2px 8px;
+        background-color: #101A72;
+        color: white;
+        font-weight: 700;
         border-radius: 4px;
-        font-size: 14px;
-        color: #333;
-        margin: 0 auto;
-        width: 80%;
+    }
+}
+
+
+.emails-container{
+    margin-top: 26px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+
+
+    .email-title{
+    font-family: 'Open Sans';
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 19.07px;
+    text-align: left;
+    
+    }
+
+    .add-span{
+        cursor: pointer;
+        background: #FAFAFB;
+
+        display: flex;
+        color: #101B73; 
+        gap: 0 3px;
+        font-family: 'Open Sans';
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 21.79px;
+        text-align: center;
+        padding: 7.5px 24px;
+    }
+}
+
+.showEmail-container{
+    margin-top: 8px;
+    width: 485px;
+    height: 113px;
+    border: 1px solid #C4C4C4;
+    border-radius: 10px;
+    padding: 16px;
+
+    .emailIn {
+        display: inline-flex; /* Inline-flex to make the div width dynamic */
+        align-items: center; /* Center the items vertically */
+        gap: 12px; /* 12px gap between email text and "x" icon */
+        padding: 3px 9px; /* 5px padding top/bottom, 16px left/right */
+        border-radius: 20px; /* Optional: Add border-radius for rounded edges */
+        max-width: 100%; /* Prevents the div from stretching too far */
+        border: 1px solid #747474;
+
+        p{
+            margin-top: 8px;
+            font-family: 'Open Sans';
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 19.07px;
+            text-align: left;
+
+        }
+
+        .remove-icon {
+            margin-top: 0.1px;
+            color: white;              /* Set the color of the "x" icon */
+            background-color: #101A72; /* Set the background color */
+            border-radius: 50%;
+            padding: 2px; 
+            width: 10px;
+            height: 10px; 
+            font-size: x-small;
+            display: inline-flex;      /* Center the icon within the background */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+          }
+    }
 }
 
 .vehicles-container{
@@ -71,39 +198,122 @@
         font-size: 14px;
         color: #333;
         margin: 0 auto;
-        width: 80%;
+        width: 100%;
 }
 
-::ng-deep {
-    .custom-form-field {
-        width: 500px;
-        height: 100px;
-        font-size: 12px;
-        text-align: center;
-      
-        .custom-input {
-          padding: 5px 10px;
-          font-size: 12px;
-    
+.select-vehicles-cont{
+    margin-top: 30px;
+    .select-vehicle-title{
+        
+        font-family: 'Open Sans';
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 19.07px;
+        text-align: left;
+
+    }
+
+    .vehicle-options{
+        height: 282px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #C4C4C4;
+        padding: 16px 32px 10px 32px;
+
+        .vehicle-list-cont{
+            margin-top: 47px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px 29px;
+            max-height: 178px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            
+
+            .checkbox-container{
+            display: flex;
+            gap: 0 16px;
+
+            .checkbox-content{
+                display: flex;
+                flex-direction: column;
+                gap: 2px 0px;
+            }
+
         }
-      }
-    
+
+        }
+        
+        .filter-container{
+            display: flex;
+            justify-content: space-between;
+
+
+            .searcher{
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+
+                .search-icon {
+                    color: #3B96F3; /* Icon color */
+                    position: absolute;
+                    left: 8px; /* Adjust icon position */
+                    pointer-events: none; /* Ensure clicks focus on input */
+                  }
+                  
+
+                .searching{
+                    width: 177px;
+                    height: 41px;
+                    border: 1px solid #C4C4C4;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    padding-left: 30px;
+                    text-indent: 10px; 
+                }
+
+                .searcher::placeholder{
+                    color: #C4C4C4;
+                    font-family: 'Open Sans';
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 19.07px;
+                    text-align: center;
+                }
+                }
+
+
+            .branch-selector{
+                appearance: none; 
+                width: 228px;
+                height: 41px;
+                border: 1px solid #C4C4C4;
+                border-radius: 6px;
+                padding: 5px 16px;
+               
+                font-family: 'Open Sans';
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 19.07px;
+                text-align: left;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%233B96F3' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 10px center; 
+                background-size: 25px;
+            }
+        }
+    }
 }
 
 .filter-container{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 
-.search{
-    width: 100px;
-    height: 50px;
-}
 
-.search-input{
-    height: 30px;
-}
+
+
 
 .vehicles-list{
         max-height: 300px;
@@ -114,22 +324,14 @@
         padding: 5px
 }
 
-.checkbox-content{
-    display: flex;
-    flex-direction: column;
-    gap: 1px 0px;
-}
 
-.checkbox-container{
-    display: flex;
-    gap: 0px 5px;
-    border: 1px solid #ccc;
-    padding: 5px;
-  background-color: #f9f9f9;
-  align-items: flex-start;
-}
 
 .checkbox-input{
     width: 20px;
     height: 20px;
 }
+
+
+
+
+

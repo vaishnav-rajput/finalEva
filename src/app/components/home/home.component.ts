@@ -37,9 +37,9 @@ onEditDataset(index: number){
 
 onOpenModal(id: any, title: any, isEdit = false){
     this.dialog.open(VehicleFormComponent, {
-      width: '50%',
+  
       maxHeight: '90vh',
-      // panelClass: 'custom-modal',
+      panelClass: 'custom-dialog-container',
       data: {
         
         title: title,

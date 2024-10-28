@@ -35,8 +35,6 @@ export class ScheduleFormComponent implements OnInit {
       this.vehicles = state.vehicleList;
       this.mailedTo = state.emailList;
       this.reports = state.reportsList
-      console.log("vehicles", this.vehicles)
-      console.log("emails", this.mailedTo)
     })
 
     this.scheduleForm = this.fb.group({
@@ -87,9 +85,7 @@ export class ScheduleFormComponent implements OnInit {
     }
   }
 
-  parseVehicle(vehicleString: string): any {
-      return JSON.parse(vehicleString);
-    } 
+ 
 
   isPastDate(day: number){
     return day < this.today
@@ -157,9 +153,6 @@ export class ScheduleFormComponent implements OnInit {
         skipWeekend,
         amPm
       }))
-
-
-
 
       this.dialogRef.close()
 

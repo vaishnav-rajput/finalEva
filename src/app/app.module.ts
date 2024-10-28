@@ -14,7 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { formReducer } from './services/store/Form/form.reducers';
 import { VehicleFilterPipe } from './pipes/vehicle-filter.pipe';
 import { ConfirmationFormComponent } from './components/confirmation-form/confirmation-form.component';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,8 @@ import { ConfirmationFormComponent } from './components/confirmation-form/confir
     ReactiveFormsModule,
     StoreModule.forRoot({formState: formReducer}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    FormsModule
+    FormsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

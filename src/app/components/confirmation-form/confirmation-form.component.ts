@@ -43,9 +43,7 @@ export class ConfirmationFormComponent implements OnInit{
 
       formState.pipe(take(1)).subscribe(formState => {
         const updateInput: FormModel = formState;
-        console.log("update input", updateInput)
         const index: number = this.data.index;
-        console.log("index to change", index)
         this.store.dispatch(updateDataset({index, updateInput}))
       })
     this.store.dispatch(resetForm())

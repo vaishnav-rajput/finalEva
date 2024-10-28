@@ -1,4 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-dialog-container {
+    border-radius: 10px;
+  }
+ 
+
+  .mdc-checkbox .mdc-checkbox__background{
+    color: #101A72 !important;
+    border-color: #101A72 !important;
+    border-radius: 4px !important;
+  }
+
+  .mdc-checkbox.mdc-checkbox--selected .mdc-checkbox__background,
+  .mdc-checkbox.mdc-checkbox-indeterminate .mdc-checkbox__background{
+    background-color: #101A72 !important;
+}
+
+.mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background, .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
+  border-color: #101A72 !important;
+  background-color: #101A72 !important;
+  border-radius: 4px !important;
+}
+

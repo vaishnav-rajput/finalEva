@@ -1,4 +1,4 @@
-<div class="parent-container ">
+<!-- <div class="parent-container ">
     <h2>Schedule Reports</h2>
     <h3>Select Required Report Types</h3>
     <form class="form-class"  [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
@@ -8,34 +8,36 @@
              (change)="onCheckboxChange($event, i)"
              >
                 {{report}}
-            </mat-checkbox>
-            <!-- (change)="onCheckboxChange($event)" -->
-         
+            </mat-checkbox>         
         </div>
-        <mat-error *ngIf="vehicleForm.get('reports').errors?.['minCheckboxes']">
+        <mat-error *ngIf="vehicleForm.get('reports').errors?.['minCheckboxes'] && vehicleForm.get('reports')?.touched">
             Atleast one report type must be selected
-        </mat-error>
+        </mat-error> -->
 
         <!-- email -->
+        <!-- <div class="enter-emails">
          <h3>Enter Email ids</h3>
-         <div  >
+         <p type="button" class="add-show" (click)="toggleAddEmail()">+Add</p>
+         </div>
+         <div *ngIf="showEmailInput" >
             <mat-form-field appearance="fill" class="custom-form-field">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="currentEmail" class="custom-input"  placeholder="enter email ">
                 
             </mat-form-field>
             <button type="button" mat-raised-button color="primary" class="custom-button" (click)="addEmail($event)">Add</button>
-         </div>
+            <mat-error *ngIf="errEmailLength">Maximum 5 emails allowed</mat-error>
+        </div> -->
        
-        <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
+        <!-- <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
             Email already Entered
-        </mat-error>
+        </mat-error> -->
 
-        <div *ngIf="hasVehicleWiseReport()">
-            <h3>Select Vehicles</h3>
+        <!-- <div  *ngIf="hasVehicleWiseReport()">
+            <h3 class="select-vehicles">Select Vehicles</h3>
             <div class="vehicles-container">
                 <!-- filtering -->
-                <div class="filter-container">
+                <!-- <div class="filter-container">
                 <mat-form-field class="custom-select">
                     <mat-label>Select Branch</mat-label>
                     <mat-select class="mat-select" (selectionChange)="branchChanged()" [(value)]="selectedBranch" >
@@ -45,13 +47,13 @@
                     </mat-select>
                 </mat-form-field>
                 <div class="search">
-                    <input class="search-input"  formControlName="searchText"  placeholder="search vehicles..">
+                    <input class="search-input"  matInput formControlName="searchText"  placeholder="search vehicles..">
                 </div>
-                </div>
+                </div> -->
                 <!-- vehicles -->
-                    <div formGroupName="vehicleList" class="vehicles-list">
+                    <!-- <div formGroupName="vehicleList" class="vehicles-list">
                         <!-- vehicle checkbox -->
-                        <div *ngFor="let vehicle of vehiclesData | vehicleFilter : searchInput" class="checkbox-container">
+                        <!-- <div *ngFor="let vehicle of vehiclesData | vehicleFilter : searchInput" class="checkbox-container">
                             <input class="checkbox-input" (change)="onVehicleCheckbox(vehicle,$event)" type="checkbox"  >
                             <div class="checkbox-content">
                                 <p>{{vehicle.registration_number}}</p>
@@ -60,15 +62,102 @@
                             </div>
                         </div>
                     </div>
-            </div>
-        </div>
+            </div> -->
+        <!-- </div> --> 
 
-        <div class="email-container">
+        <!-- <div class="email-container">
             <div class="remove-button" *ngFor="let email of emailList.controls; index as i">
                 <p>{{email.value}}</p>
                 <p class="remove" (click)="removeEmail(i)">X</p>
             </div>
         </div>
-        <button type="submit" mat-raised-button [disabled]="!vehicleForm.valid || emailList.controls.length === 0">Next</button>
+        <button type="submit" mat-raised-button color="primary" class="next-btn" [disabled]="!vehicleForm.valid || emailList.controls.length === 0">Next</button>
     </form>
-</div>  
+</div>   -->
+<div class="parent-container">
+    <div class="title-container">
+        <p class="heading">Schedule Reports</p>
+        <span class="material-symbols-outlined" (click)="closeDialog()">close</span>
+    </div>
+    <p class="select-required">Select Required Report Types</p>
+    <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+        <div class="reports-container" formGroupName="reports">
+            <mat-checkbox [formControlName]="i" *ngFor="let report of reportsArray, let i = index"
+            [checked]="isReportSelected(report)" [value]="report"
+            (change)="onCheckboxChange($event, i)"
+            >
+            {{report}}
+            </mat-checkbox>
+        </div>
+        <mat-error *ngIf="vehicleForm.get('reports').errors?.['minCheckboxes'] && vehicleForm.get('reports')?.touched">
+            Atleast one report type must be selected
+        </mat-error>
+        <!-- SELECT VEHICLES -->
+         <div class="select-vehicles-cont">
+            <p class="select-vehicle-title">Select Vehicles</p>
+            <div class="vehicle-options">
+
+                <!-- FILTER VEHICLES -->
+                <div class="filter-container">
+                    <select (change)="branchChanged()"
+                    formControlName="branch"
+                    class="branch-selector"
+                    >
+                        <option value="All">All</option>
+                        <option *ngFor="let branch of vehicleBranches" value="{{branch}}">{{branch}}</option>
+                    </select>
+                    <div class="searcher">
+                        <mat-icon *ngIf="!searchInput" class="search-icon">search</mat-icon>
+                        <input class="searching" formControlName="searchText" type="text" placeholder="Search">
+                        
+                    </div>
+                </div>
+                
+                <div class="vehicle-list-cont">
+                    <div *ngFor="let vehicle of vehiclesData | vehicleFilter : searchInput" class="checkbox-container">
+                        <input class="tickCheck" (change)="onVehicleCheckbox(vehicle, $event)" type="checkbox">
+                        <div class="checkbox-content" >
+                            <p>{{vehicle.registration_number}}</p>
+                            <p>{{vehicle.vin}}</p>
+                            <p>{{vehicle.lob_name}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="emails-container">
+            <p class="email-title">Enter email ids</p>
+            <p class="add-span" (click)="toggleAddEmail()">
+                <ng-container *ngIf="showEmailInput; else addEmailTemplate">
+                    <span>Cancel</span>
+                  </ng-container>
+                  <ng-template #addEmailTemplate>
+                    <span>
+                      <span>+</span>
+                      <span>Add</span>
+                    </span>
+                  </ng-template>
+            </p>
+        </div>
+        <div *ngIf="showEmailInput" class="add-email-cont">
+            <input type="text" class="email-input-box" formControlName="currentEmail" >
+            <button class="add-button" type="button" (click)="addEmail($event)">Add</button>
+       
+        </div>
+        <mat-error *ngIf="errEmailLength">Maximum 5 emails allowed</mat-error>
+        <mat-error *ngIf="isEmailInList(vehicleForm.get('currentEmail')?.value ) && vehicleForm.get('currentEmail')?.touched ">
+            Email already Entered
+        </mat-error>
+        <div class="showEmail-container">
+            <div
+                class="emailIn"
+                *ngFor="let email of emailList.controls; index as i"
+            >
+                <p>{{email.value}}</p>
+                <span class="remove-icon" (click)="removeEmail(i)">x</span>  
+            </div>
+        </div>
+    </form>
+    
+</div>
