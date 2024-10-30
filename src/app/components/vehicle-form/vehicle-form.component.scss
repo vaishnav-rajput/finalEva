@@ -221,23 +221,34 @@
         padding: 16px 32px 10px 32px;
 
         .vehicle-list-cont{
-            margin-top: 47px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px 29px;
+            width: 100%;
+            
             max-height: 178px;
             overflow-y: auto;
             margin-bottom: 10px;
-            
+            scrollbar-width: none;
+            margin: 0 auto;
+            margin-top: 47px;
+            padding: 0;
+            text-align: left;
+
+
 
             .checkbox-container{
             display: flex;
             gap: 0 16px;
+            box-sizing: border-box;
+            border: 1px solid black;
+            height: 75px;
 
             .checkbox-content{
                 display: flex;
                 flex-direction: column;
-                gap: 2px 0px;
+                gap: 4px 0px;
+                height: 59px;
             }
 
         }

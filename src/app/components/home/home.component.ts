@@ -19,6 +19,8 @@ ngOnInit(): void {
   this.store.select('formState').subscribe((state) => {
     this.datasets = state.datasets;
   })
+
+  this.onOpenModal(0, 'schedule report');
 }
 
 onEditDataset(index: number){

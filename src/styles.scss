@@ -7,7 +7,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container {
     border-radius: 10px;
   }
- 
+
+  div.mat-mdc-dialog-surface.mdc-dialog__surface{
+    scrollbar-width: none;
+  }
 
   .mdc-checkbox .mdc-checkbox__background{
     color: #101A72 !important;
